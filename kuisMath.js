@@ -2,6 +2,13 @@
 
 const prompt = require("prompt-sync")();
 
+// objek dalam jumpah menang dan kalah
+const obj = {
+  benar: 0,
+  salah: 0,
+  skor: 0
+}
+
 // function pilih level
 function level(levl) {
   switch(levl) {
@@ -20,19 +27,27 @@ function level(levl) {
   }
 }
 const sLevel = Number(prompt("pilih level(1/2/3) : "));
-const lev = level(sLevel);
 
 // fungsi utama
+// jika kuis terjawab 5 maka akan berhenti
+let index = 0;
 function kuis(){
-  let ranA = Math.floor(Math.random() * lev);
-  let ranB = Math.floor(Math.random() * lev);
+  let ranA = Math.floor(Math.random() * level(sLevel));
+  let ranB = Math.floor(Math.random() * level(sLevel));
   let op = aritMath();
   let hasil = eval(`${ranA} ${op} ${ranB}`);
   let jawaban = Number(prompt(`hasil dari : ${ranA} ${op} ${ranB} = `));
   isTrue(hasil, jawaban);
   
-  let reset = prompt("ulangi(1/0): ");
-  ulang(reset);
+  if(index >= 5) {
+    index = 0;
+    let reset = prompt("ulangi(1/0): ");
+    ulang(reset);
+  }
+  else {
+    let reset = "1";
+    ulang(reset);
+  }
 }
 
 // menentukan operator aritmatik dalam kuis
@@ -46,25 +61,34 @@ function aritMath() {
 // mengetaui jawaban bemar atau tidak
 function isTrue(value, answer) {
   if(value == answer) {
-    console.info("is true");
+    console.info("is true bro jawaban lu bener");
+    obj.benar++;
   }
   else {
-    console.info("false bro");
+    console.info(`false bro jawabanya ${value}`);
+    obj.salah++;
   }
+  index++;
 }
 
 
 // mengulangi kuis;
 function ulang(value) {
+  let skor = Math.floor(100 / (obj.benar * obj.salah));
+  obj.skor = skor;
   switch(value) {
     case "1":
       kuis();
     break;
     case "0":
+      console.table(obj);
       return;
     break;
     default:
       console.info("itu tidak ada dan kami anggap selesai");
+      console.table(obj)
   }
 }
+
+
 kuis();
