@@ -1,4 +1,5 @@
 // membuat kuis matematika sederhana
+// dibuat oleh arya dewangga p -(aryadev127)
 
 const prompt = require("prompt-sync")();
 
